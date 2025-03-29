@@ -22,6 +22,74 @@ class Lista {
     this.primero = null;
   }
 
+  // Método: invertirOrden()
+  // Propósito: Invierte el orden de los elementos en la colección enlazada.
+  invertirOrden() {
+    let elementoAnterior = null; // Elemento anterior en la inversión
+    let elementoActual = this.primerElemento; // Elemento actual en la inversión
+    let elementoSiguiente = null; // Elemento siguiente en la inversión
+
+    // Recorre la colección, invirtiendo los enlaces de los elementos
+    while (elementoActual !== null) {
+      elementoSiguiente = elementoActual.siguienteElemento; // Guarda el siguiente elemento
+      elementoActual.siguienteElemento = elementoAnterior; // Invierte el enlace del elemento actual
+      elementoAnterior = elementoActual; // Mueve 'elementoAnterior' al elemento actual
+      elementoActual = elementoSiguiente; // Mueve 'elementoActual' al siguiente elemento
+    }
+
+    this.primerElemento = elementoAnterior; // El último elemento se convierte en el primero
+  }
+
+  // Método: eliminarElementosConValoresDuplicados()
+  // Propósito: Elimina los elementos con valores duplicados de la colección enlazada.
+  eliminarElementosConValoresDuplicados() {
+    let elementoActual = this.primerElemento; // Elemento actual en la comparación
+
+    // Recorre la colección
+    while (
+      elementoActual !== null &&
+      elementoActual.siguienteElemento !== null
+    ) {
+      let elementoComparador = elementoActual; // Elemento comparador para buscar duplicados
+
+      // Compara el elemento actual con el resto de la colección
+      while (elementoComparador.siguienteElemento !== null) {
+        // Si se encuentra un duplicado, elimina el elemento duplicado
+        if (
+          elementoActual.valor === elementoComparador.siguienteElemento.valor
+        ) {
+          elementoComparador.siguienteElemento =
+            elementoComparador.siguienteElemento.siguienteElemento; // Salta el elemento duplicado
+        } else {
+          elementoComparador = elementoComparador.siguienteElemento; // Avanza el comparador
+        }
+      }
+
+      elementoActual = elementoActual.siguienteElemento; // Avanza al siguiente elemento
+    }
+  }
+
+  // Método: obtenerElementoDesdeElFinalPorPosicion(posicionDesdeFinal)
+  // Propósito: Obtiene el elemento en la posición especificada desde el final de la colección enlazada.
+  obtenerElementoDesdeElFinalPorPosicion(posicionDesdeFinal) {
+    let punteroLento = this.primerElemento; // Puntero lento
+    let punteroRapido = this.primerElemento; // Puntero rápido
+
+    // Mueve el puntero rápido 'posicionDesdeFinal' posiciones adelante
+    for (let i = 0; i < posicionDesdeFinal; i++) {
+      if (punteroRapido === null) return null; // 'posicionDesdeFinal' es mayor que la longitud de la colección
+      punteroRapido = punteroRapido.siguienteElemento;
+    }
+
+    // Mueve ambos punteros hasta que 'punteroRapido' llegue al final
+    while (punteroRapido !== null) {
+      punteroLento = punteroLento.siguienteElemento;
+      punteroRapido = punteroRapido.siguienteElemento;
+    }
+
+    return punteroLento ? punteroLento.valor : null; // Devuelve el valor del elemento o null si n = longitud
+  }
+
   leerPrimero() {
     return this.primero;
   }
@@ -78,65 +146,31 @@ class Lista {
   toString() {
     return `=> ${this.primero}`;
   }
-
-  // Método: invertir()
-  // Propósito: Invierte el orden de los nodos en la lista enlazada.
-  invertir() {
-    let anterior = null; // Nodo anterior en la inversión
-    let actual = this.primero; // Nodo actual en la inversión
-    let siguiente = null; // Nodo siguiente en la inversión
-
-    // Recorre la lista, invirtiendo los enlaces de los nodos
-    while (actual !== null) {
-      siguiente = actual.enlace; // Guarda el siguiente nodo
-      actual.enlace = anterior; // Invierte el enlace del nodo actual
-      anterior = actual; // Mueve 'anterior' al nodo actual
-      actual = siguiente; // Mueve 'actual' al siguiente nodo
-    }
-
-    this.primero = anterior; // El último nodo se convierte en el primero
-  }
-
-  // Método: eliminarDuplicados()
-  // Propósito: Elimina los nodos duplicados de la lista enlazada.
-  eliminarDuplicados() {
-    let actual = this.primero; // Nodo actual en la comparación
-
-    // Recorre la lista
-    while (actual !== null && actual.enlace !== null) {
-      let compara = actual; // Nodo comparador para buscar duplicados
-
-      // Compara el nodo actual con el resto de la lista
-      while (compara.enlace !== null) {
-        // Si se encuentra un duplicado, elimina el nodo duplicado
-        if (actual.dato === compara.enlace.dato) {
-          compara.enlace = compara.enlace.enlace; // Salta el nodo duplicado
-        } else {
-          compara = compara.enlace; // Avanza el comparador
-        }
-      }
-
-      actual = actual.enlace; // Avanza al siguiente nodo
-    }
-  }
-  // Método: obtenerDesdeElFinal
-  // Propósito: Obtiene el numero de elemento desde el final de la lista enlazada.
-  obtenerDesdeElFinal(n) {
-    let final = this.primero; // Puntero final
-    let inicio = this.primero; // Puntero inicio
-
-    // Mueve el puntero inicial  posiciones adelante
-    for (let i = 0; i < n; i++) {
-      if (inicio === null) return null; // 'n' es mayor que la longitud de la lista
-      inicio = inicio.enla;
-    }
-
-    // Mueve ambos punteros hasta que 'inicial' llegue al final
-    while (inicio !== null) {
-      final = final.enlace;
-      inicio = inicio.enlace;
-    }
-
-    return final ? final.dato : null; // Devuelve el dato del nodo o null si n = longitud
-  }
 }
+
+const lista = new Lista();
+lista.insertarCabezaLista(3);
+lista.insertarCabezaLista(2);
+lista.insertarCabezaLista(1);
+
+console.log("Lista inicial:");
+lista.visualizar();
+
+const nodo2 = lista.buscarLista(2);
+if (nodo2) {
+  lista.insertarLista(nodo2, 5);
+}
+
+console.log("\nDespués de insertar 5 después del 2:");
+lista.visualizar();
+
+lista.eliminar(5);
+console.log("\nDespués de eliminar el 5:");
+lista.visualizar();
+
+lista.eliminar(1);
+console.log("\nDespués de eliminar la cabeza (1):");
+lista.visualizar();
+
+console.log("\nRepresentación toString:");
+console.log(lista.toString());
