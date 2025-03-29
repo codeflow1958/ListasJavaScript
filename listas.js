@@ -1,3 +1,6 @@
+import { ColeccionEnlazada, ElementoLista } from "./listaEnlazada.js"; // Asegúrate de que la ruta sea correcta.
+import { describe, expect, test } from "@jest/globals";
+
 class Nodo {
   constructor(dato, enlace = null) {
     this.dato = dato;
@@ -161,16 +164,46 @@ if (nodo2) {
   lista.insertarLista(nodo2, 5);
 }
 
-console.log("\nDespués de insertar 5 después del 2:");
-lista.visualizar();
+describe("ColeccionEnlazada", () => {
+  test("pruebas para la funcionalidad básica de la lista", () => {
+    const lista = new ColeccionEnlazada();
+    lista.agregarElementoAlInicio(3);
+    lista.agregarElementoAlInicio(2);
+    lista.agregarElementoAlInicio(1);
 
-lista.eliminar(5);
-console.log("\nDespués de eliminar el 5:");
-lista.visualizar();
+    // Verifica que la lista inicial esté correcta
+    expect(lista.obtenerElementoDesdeElFinalPorPosicion(2)).toBe(1);
+    expect(lista.obtenerElementoDesdeElFinalPorPosicion(1)).toBe(2);
+    expect(lista.obtenerElementoDesdeElFinalPorPosicion(0)).toBe(3);
 
-lista.eliminar(1);
-console.log("\nDespués de eliminar la cabeza (1):");
-lista.visualizar();
+    const nodo2 = lista.buscarElementoPorValor(2);
+    if (nodo2) {
+      lista.agregarElementoDespuesDe(nodo2, 5);
+    }
 
-console.log("\nRepresentación toString:");
-console.log(lista.toString());
+    // Verifica que el 5 se haya insertado correctamente después del 2
+    expect(lista.obtenerElementoDesdeElFinalPorPosicion(1)).toBe(5);
+
+    lista.removerElementoPorValor(5);
+
+    // Verifica que el 5 se haya eliminado
+    expect(lista.buscarElementoPorValor(5)).toBeNull();
+
+    lista.removerElementoPorValor(1);
+
+    // Verifica que la cabeza (1) se haya eliminado
+    expect(lista.obtenerElementoDesdeElFinalPorPosicion(1)).toBe(3);
+    expect(lista.obtenerElementoDesdeElFinalPorPosicion(0)).toBe(2);
+  });
+
+  // prueba para representacion de toString();
+  test("prueba para toString", () => {
+    const lista = new ColeccionEnlazada();
+    lista.agregarElementoAlInicio(3);
+    lista.agregarElementoAlInicio(2);
+    lista.agregarElementoAlInicio(1);
+    expect(lista.obtenerRepresentacionColeccion()).toBe(
+      "=> ElementoLista { valor: 1, siguienteElemento: ElementoLista { valor: 2, siguienteElemento: ElementoLista { valor: 3, siguienteElemento: null } } }"
+    );
+  });
+});
